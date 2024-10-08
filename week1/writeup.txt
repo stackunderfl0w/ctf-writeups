@@ -1,0 +1,24 @@
+Dr. B. Breaker's Barely Bestirring Brick Breaker!
+
+A quick look at the source code shows that the score is sent over to a server for authentication. A simple solution was just to use the javascript console to set the score manually and the flag pops up.
+
+
+
+
+Dr. Ralph Fleur's Baffling Raffle
+
+	the random numbers are sent over to the server as
+
+    let response = await fetch(`/raffle?field1=${a}&field2=${b}&field3=${c}&field4=${d}&field5=${e}`);
+
+    looking at the server.js the values are parsed as
+
+        if (!guesses.field1 || parseInt(guesses.field1) > digits[0] || parseInt(guesses.field1) < digits[0]) {
+
+    I thought, I wonder how javascript would handle non integer inputs.
+
+
+
+    https://arcade.ctf-league.osusec.org/raffle?field1=a&field2=b&field3=c&field4=d&field5=e
+
+    and the flag is returned to the browser 
