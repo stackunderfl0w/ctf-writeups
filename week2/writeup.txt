@@ -1,0 +1,54 @@
+
+Level 0 was completed using cat
+
+cat creds_level1/creds_level1.txt
+next user: level1_7373
+password: 7d58d0
+
+Level 1 was completed using grep to find the key file
+
+grep -rni "password"
+n9ohc4mq/nebggxxe/tpeajo5w/1tjo978k/ijshwjh1/j5oh5vm1/creds_level2.txt:2:password: 4698e3
+
+
+Level 2 was once again completed using grep to find the password inside the large amounts of text
+
+level2_7373@ee04a1676226:~$ grep -rni "password"
+creds_level3.txt:51670:password: adefa4
+level2_7373@ee04a1676226:~$ grep -rni "level"
+creds_level3.txt:51669:next user: level3_7373
+
+
+Level 3 was completed by running the script using sh
+
+level3_7373@ee04a1676226:~$ sh creds_level4.sh
+=====creds:=====
+*** WARNING : deprecated key derivation used.
+Using -iter or -pbkdf2 would be better.
+next user: level4_7373 password: 6c8960
+
+
+
+Level 4 had the next login within a hidden file in a hidden directory. These were found using ls -a
+
+level4_7373@ee04a1676226:~$ cat .hidden_creds_level5/.creds_level5.txt
+
+
+Level 5 had the next login in a folder and file with spaces. This was simple enough to get through using tab autocomplete.
+
+level5_7373@ee04a1676226:~$ cat look\ in\ here/creds\ in\ here\!
+next user: level6_7373
+password: 4eabdf
+
+Level 6 involved the daunting task of exiting vim before being given the next login
+
+level6_7373@ee04a1676226:~$ cat creds_level7.txt
+next user: level7_7373
+password: f5872f
+
+
+
+level 7 simply had the flag in a file in the root directory
+
+level7_7373@ee04a1676226:~$ cat /flag.txt
+osu{gr3p_c4t5_n0t_b4ts}
