@@ -1,0 +1,28 @@
+
+
+The first flag is aquired by climbing to the top platform, double jumping and landing on the clouds over the starting location, then going off the left side of the screen, which then wraps around to the flag. Since the xpos is stored as an unsigned char, the moment it goes to negative 1 it underflows to 255, taking us to the end of the level.
+
+
+To get to the flag, the player must pass through a [ gate which requires the player to have exactly 1650549605 dollars.
+
+
+
+
+The second flag is achieved with a buffer overflow from the inventory to the player dollar amount,
+
+    char inventory[4];
+    uint dollars;
+which are next to each other in memmory.
+
+This is overflown with
+
+    if (input == 's' && current_block_properties.mustInteract) {
+        if (current_block_properties.specialProperty) {
+            message = (*current_block_properties.specialProperty)(current_level_location, player_info);
+        }
+The player can overflowthe dollar amount by collecting extra keys.
+
+1650549605 converted to hex is 0x62616365
+or in ascii b a c e
+
+swap the bytes and you need to collect e c a b in order. Since there is no e accesable we can instead collect an additional d c a b instead and then get 1 additional dollar. Conveniently there is a doller we can skip when collecting b.
