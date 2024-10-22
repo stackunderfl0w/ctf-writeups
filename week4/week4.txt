@@ -1,0 +1,28 @@
+Flag 1
+Running strings in utf16 mode on the binary results in a base 64 encoded sting which when decoded is a config inluding the flag
+
+strings -e l not_malware.dll
+
+echo ewogICJjMl9zZXJ2ZXIiOiAic2Z0cDovL3NjcmlwdGtpZC5jdGYtbGVhZ2Uub3N1c2VjLm9yZyIsCiAgInBvcnQiOiAxMzA0LAogICJ1c2VybmFtZSI6ICJyZWFsaXR5c3VyZiIsCiAgInBhc3N3b3JkIjogIm9zdXtkMG50X3N0MHIzX3kwdXJfczNjcjN0c19sMWszX3RoMXN9Igp9ICA= |base64 -d
+{
+  "c2_server": "sftp://scriptkid.ctf-leage.osusec.org",
+  "port": 1304,
+  "username": "realitysurf",
+  "password": "osu{d0nt_st0r3_y0ur_s3cr3ts_l1k3_th1s}"
+}
+
+Flag 2
+
+Connecting to the server with the credentials lets you find a txt file containing the flag which you can then copy over
+
+sftp -P 1304 realitysurf@scriptkid.ctf-league.osusec.org
+
+scp -P 1304 realitysurf@scriptkid.ctf-league.osusec.org:ftp/flag.txt .
+
+Flag 3
+
+Flag 3 is found by setting a breakpoint after the request from the server is returned and checking the data returned which conatains the flag
+
+Flag4
+From the same breakpoint you can get the url of the data. Lead it in a web browser to find timmys data, then send a delete request on his data.
+curl -X "DETETE"/url i dont want to retype from a vm/1
