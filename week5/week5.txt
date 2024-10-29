@@ -1,0 +1,6 @@
+The first flag was trying different inputs over and over becuase the moves were not randomized.
+A quick look with ghidra shows the hardcoded moves.
+
+The second was similar.
+A quick look with ghidra shows the moves are generated with a somewhat crypotographic looking function using the name entered as a string. Put the same name in and we have a fixed state we can brute force. 
+
