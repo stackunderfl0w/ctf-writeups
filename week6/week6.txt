@@ -1,0 +1,111 @@
+Level 0 was as simple as undoing a delete with git reset --hard
+
+level0_20544@5b0df980e9b2:~/my_repository$ git reset --hard
+HEAD is now at c910339 stored my credentials! nice and safe :)
+level0_20544@5b0df980e9b2:~/my_repository$ ls
+creds_level1.txt
+level0_20544@5b0df980e9b2:~/my_repository$ cat creds_level1.txt
+next user: level1_20544
+password: 496b0c
+
+Level 1 had the password stored in the commit message
+
+level1_20544@5b0df980e9b2:~/my_repository$ git log
+commit 3db23bb4575a61597017954612480f2ad384347a (HEAD -> master)
+Author: imacybercriminal <yungswipa@ilovecrime.com>
+Date:   Tue Nov 5 02:32:01 2024 +0000
+
+    dd655c is a terrible password for level2_20544... hehehee... catch me if you can!
+
+Level 2 was finding the commit before everything was deleted
+
+level2_20544@5b0df980e9b2:~/my_repository$ git status
+On branch master
+nothing to commit, working tree clean
+level2_20544@5b0df980e9b2:~/my_repository$ git log
+commit 3748c934c6db886b6a9b00cc7768e9ac2d8e4941 (HEAD -> master)
+Author: imacybercriminal <yungswipa@ilovecrime.com>
+Date:   Tue Nov 5 02:32:03 2024 +0000
+
+    hehe, catch me if you can!
+
+commit def000cc8fb68a3d5861db5bee53a651990261f3
+Author: xX_liltimmyT_Xx <littletimmy@roblox.com>
+Date:   Tue Nov 5 02:32:02 2024 +0000
+
+    stored my credentials! nice and safe :)
+level2_20544@5b0df980e9b2:~/my_repository$ git checkout def000cc8fb68a3d5861db5bee53a651990261f3
+Note: switching to 'def000cc8fb68a3d5861db5bee53a651990261f3'.
+
+
+HEAD is now at def000c stored my credentials! nice and safe :)
+level2_20544@5b0df980e9b2:~/my_repository$ ls
+creds_level2.txt
+level2_20544@5b0df980e9b2:~/my_repository$ cat creds_level2.txt
+next user: level3_20544
+password: 1e845b
+
+
+Level 3 had the password stored in a different branch
+
+level3_20544@5b0df980e9b2:~/my_repository$ git branch
+  dontlookinhere
+* master
+level3_20544@5b0df980e9b2:~/my_repository$ git checkout dontlookinhere
+Switched to branch 'dontlookinhere'
+level3_20544@5b0df980e9b2:~/my_repository$ ls
+creds_level2.txt
+level3_20544@5b0df980e9b2:~/my_repository$ cat creds_level2.txt
+next user: ???
+password: ???
+next user: level4_20544
+password: 5c7a50
+
+
+Level 4 had a bunch of fake logins added to a file, with the real being found using git blame to see which was added by a different user
+
+2b75edbf (imacybercriminal 2024-11-05 02:32:14 +0000 340) password: 9eae6c
+6588473c (imacybercriminal 2024-11-05 02:32:14 +0000 341) next user: level5_20544
+6588473c (imacybercriminal 2024-11-05 02:32:14 +0000 342) password: e00e5b
+27a69c8c (xX_liltimmyT_Xx  2024-11-05 02:32:14 +0000 343) next user: level5_20544
+27a69c8c (xX_liltimmyT_Xx  2024-11-05 02:32:14 +0000 344) password: 6c790e
+9d7dc9b5 (imacybercriminal 2024-11-05 02:32:14 +0000 345) next user: level5_20544
+9d7dc9b5 (imacybercriminal 2024-11-05 02:32:14 +0000 346) password: d5fdbe
+09d4fb2e (imacybercriminal 2024-11-05 02:32:14 +0000 347) next user: level5_20544
+
+
+Level 5 was the first flag
+level5_20544@5b0df980e9b2:~$ cat /flag5.txt
+osu{cr3d5_1n_r3p0_??m0r3_l1k3ly_th4n_u_th1nk}
+
+Level 6 had the branch with the password deleted, but still listed in git reflog
+
+level6_20544@5b0df980e9b2:~/my_repository$ ls
+secret_plan.txt
+level6_20544@5b0df980e9b2:~/my_repository$ git branch
+* master
+level6_20544@5b0df980e9b2:~/my_repository$ git reflog
+8c74a39 (HEAD -> master) HEAD@{0}: checkout: moving from supersecretcredentialbranch to master
+a0359a0 HEAD@{1}: commit: deleted! time to delete the branch now...
+9e26f12 HEAD@{2}: commit: stored my credentials! now I'll delete them
+8c74a39 (HEAD -> master) HEAD@{3}: checkout: moving from master to supersecretcredentialbranch
+8c74a39 (HEAD -> master) HEAD@{4}: commit (initial): secret plan phase 1 - planning
+level6_20544@5b0df980e9b2:~/my_repository$ git log
+commit 8c74a39a71467604dd1b6c3089143aa581cfc764 (HEAD -> master)
+Author: xX_liltimmyT_Xx <littletimmy@roblox.com>
+Date:   Tue Nov 5 02:32:22 2024 +0000
+
+    secret plan phase 1 - planning
+level6_20544@5b0df980e9b2:~/my_repository$ git checkout 8c74a39
+
+HEAD is now at 8c74a39 secret plan phase 1 - planning
+level6_20544@5b0df980e9b2:~/my_repository$ ls
+secret_plan.txt
+level6_20544@5b0df980e9b2:~/my_repository$ git checkout 9e26f12
+Previous HEAD position was 8c74a39 secret plan phase 1 - planning
+HEAD is now at 9e26f12 stored my credentials! now I'll delete them
+level6_20544@5b0df980e9b2:~/my_repository$ ls
+creds_level7.txt  secret_plan.txt
+level6_20544@5b0df980e9b2:~/my_repository$ cat creds_level7.txt
+next user: level7_20544
+password: c7da8a
