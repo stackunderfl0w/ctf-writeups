@@ -1,0 +1,27 @@
+After getting the correct url we get sent to a rasom page asking for sigmacoin.
+Looking at the source, the website is getting info from a /victim url. 
+going to /victim/3 we get the info for timmy and the first flag
+
+cost	5.3
+due	"2024-11-24"
+files_url	"https://yikes.ctf-league.osusec.org/files/3"
+hostname	"osu{loose_lips_sink--oh_wait_wrong_metaphor}"
+id	3
+key_url	"https://yikes.ctf-league.osusec.org/key/3"
+time	"2024-11-22"
+username	"xX_LITTLE_TIMMY_Xx"
+
+With the hostname and the time we can now bruteforce the key. We load in the first few bytes of the pdf file, which have a known header and for each key see if they succesfully decrypt the header. the key is hidden in the pdf of timmys homework.
+Decrypting the chat log we see timmys friend jimmy was also scammed. Looking through all the victims till 17 we find his friend
+
+	
+cost	22.3
+due	"2024-11-25"
+files_url	"https://yikes.ctf-league.osusec.org/files/17"
+hostname	"jimmypc"
+id	17
+key_url	"https://yikes.ctf-league.osusec.org/key/17"
+time	"2024-11-23"
+username	"xX_jimjam_Xx"
+
+Plugging in his hostname, date and the header of a mp4 file we decrypt never gonna give you up with the flag plastered on top.
