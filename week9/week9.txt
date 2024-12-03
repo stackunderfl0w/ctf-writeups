@@ -1,0 +1,22 @@
+
+flag 1 is got by reading secrets.txt by accessing public/../secrets.txt by url encoding the second / as
+
+/public/..%2Fsecrets.txt
+osu{h4ck_n_sl4sh}
+
+flag 2 is get by adding a cookie for user with value Thr33lonMusk and accessing /verified
+
+flag 3 is got by figuring out the admin sesssion id since the seed was set
+    srand(0);
+            printf("%X%X%X%X",
+            (unsigned int) rand (),
+            (unsigned int) rand (),
+            (unsigned int) rand (),
+            (unsigned int) rand ());
+
+flag 4 was got by a buffer overflow on the threets array. the fourth threet sent is directly written to the likes array
+
+            else if (session->likes[0] == 1633840489 && session->likes[1] == 1633969523 && session->likes[2] == 1919299174) {
+Convert the values needed to hex then ascii. Flip the order for big endian and then prepend a character for spacing the compiler added
+
+aimbasedaf.fr
