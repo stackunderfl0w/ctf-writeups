@@ -1,0 +1,63 @@
+
+First we connect to the remote server
+
+conn = remote('nc chal.ctf-league.osusec.org',1308)
+
+Use pwntools to accept terms
+
+conn.sendlineafter('y/n', 'y')
+
+and read and respond to 100 math questions
+
+
+	math=conn.recvuntil('?')
+	math=(math[:-3]).decode().split('*')
+
+	result=str(int(math[0])*int(math[1]))
+	conn.sendline(result.encode())
+
+
+We are then given a byte steam we can save as an image file containing the flag
+
+conn.recvuntil('here you go!\n')
+file=conn.recvuntil("What's the secret message?")
+
+# with open("image", "wb") as binary_file:
+#     binary_file.write(file)
+
+
+
+For the second flag we send this flag back
+
+conn.sendline(f'osu{{sh4rpsh00t3r}}'.encode())
+
+Convert 100 hex numbers to ints and send them back
+
+	math=conn.recvuntil('/100)\n')
+
+	num=math.decode().split(' ')[0]
+
+	num=int(num, 16)
+
+	conn.sendline(str(num).encode())
+
+
+Get the key and plaintext for the one time pad and print them out for flag 2
+
+conn.recvuntil(') key:\n')
+
+key=conn.recvuntil('secret message!\n')
+
+message=conn.recvuntil('goodbye!\n')
+
+
+
+plaintext = bytes(k ^ c for k,c in zip(key, message))
+
+
+b'osu{rhyming_is_hard}\x00\x06\x01\x0bD\n\x1c\x17D-'
+
+
+
+print(plaintext)
+
