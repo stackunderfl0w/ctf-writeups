@@ -1,0 +1,33 @@
+
+The challenge this week was a timing attack. A 12 pin lock with each additional coorect digit taking another second to process. Initiall I wrote a script but it was too inconsistnet so i wrote a small fish script to automate testing each character then manually seeing which took the longest and adding it.
+
+for i in 0 1 2 3 4 5 6 7 8 9
+	time echo "12345780133$i" | nc chal.ctf-league.osusec.org 1314
+end
+
+Which gets us a key encoded with a otp. Conveniently the otp is generated with rand in c with a seed that is conveniently provided in the logs
+
+So a couple c functions and we can reverse it
+
+time_t current_time = 1738638168;
+
+generate_otp(otp, FLAG_LENGTH, current_time);
+decrypt_flag(decrypted, ciphertext, otp, FLAG_LENGTH);
+
+printf("Found possible flag: osu{%s}\n", decrypted);
+
+
+void generate_otp(char *otp, size_t length, time_t timestamp) {
+    srand(timestamp);
+    for (size_t i = 0; i < length; i++) {
+        otp[i] = (char)(rand() % 26) + 'a';
+    }
+}
+
+// Function to decrypt the flag using the OTP
+void decrypt_flag(char *decrypted, char *ciphertext, char *otp, size_t length) {
+    for (size_t i = 0; i < length; i++) {
+        decrypted[i] = ((ciphertext[i] - otp[i] + 26) % 26) + 'a';
+    }
+    decrypted[length] = '\0';
+}
