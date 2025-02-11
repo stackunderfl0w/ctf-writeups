@@ -1,0 +1,32 @@
+The first flag was solved by noticing that the program only refused to decrypt if the input was exactly the encrypted flag. Change one char and it will happily decrypt half of it. Then repeat for the other half.
+
+nc chal.ctf-league.osusec.org 1315
+Here's the encrypted flag in hex:
+e1294cb9f76d70d12ddbf7af6e92fae61e6802906c02ae6441aaa496e1c966905eea7b49e590cc9e0947f20e3313f691b519c7dd60c625f9e95d964dec30e9d8
+Alright, lemme spin up my Extremely Convenient Breaker (trademark copyright all rights reserved).
+What ciphertext do you want me to break in an extremely convenient manner? Enter as hex: e1294cb9f76d70d12ddbf7af6e92fae61e6802906c02ae6441aaa496e1c966905eea7b49e590cc9e0947f20e3313f691b519c7dd60c625f9e95d964dec30e9d7
+b'osu{this_chal_brought_to_you_by_lactf_evryone_saN\xb8\x8cq\x19\n\x18\x1f\x16F/~\xe8>\xa2-'
+
+
+
+The second flag was noticing this line would crash if (p-1)(q-1) is divisible by 65537 ie not coprime to 65537
+
+pow(e, -1, phi)
+
+p = nextprime(start - 1)
+q = nextprime(p)  
+while not is_divisible((p-1)*(q-1),65537):
+    q=nextprime(q)
+
+print (p)
+print (q)
+
+pat@arch ~> nc chal.ctf-league.osusec.org 1316
+Welcome to my RSA as a Service!
+Pass me two primes and I'll do the rest for you.
+Let's keep the primes at a 64 bit size, please.
+Input p: 9223372036854775837
+Input q: 9223372036859527241
+Oh no! My service! Please don't give us a bad review!
+Here, have a complementary flag for your troubles.
+osu{definitely_did_not_steal_this_challenge_from_lactf_like_subscr}
