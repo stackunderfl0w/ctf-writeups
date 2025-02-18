@@ -1,0 +1,17 @@
+
+
+The chalenge is to locate a flag on a server with only the builtin bash commands
+
+The location was found with shopt to enable ** to wildcard to any subdirectory
+
+root@e499e7ef5062:/# shopt -s globstar
+root@e499e7ef5062:/# echo **/flag.txt
+usr/lib/dpkg/util/flag.txt
+
+Eventually I figured out we can use mapfile to read the contents of the file
+
+root@e499e7ef5062:/# mapfile -t lines < usr/lib/dpkg/util/flag.txt
+printf '%s\n' "${lines[@]}"
+osu{!right_where_i_left_it!}
+
+
