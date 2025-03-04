@@ -1,0 +1,33 @@
+
+
+The chalenge comes in the form of an obfuscated python program.
+
+replaceing exec with print gives what will be executed. This process neeeds to be repeated a few times
+
+a=__import__;ab=bytes;ac=ab.fromhex;ae=chr;exec(ac('657865632....29').decode())
+
+
+eventually we see at the end a variable created as
+
+x=[86, 69, 81, 75, 74, 71, 71, 67, 66, 69, 67, 73, 84, 51, 50, 55, 88, 65, 70, 74, 84, 52, 71, 83, 66, 69, 67, 73, 84, 77, 89, 81, 66, 87, 70, 75, 86, 55, 86, 61]
+aw=''.join(ae(z) for z in x);
+
+
+
+VEQKJGGCBECIT327XAFJT4GSBECITMYQBWFKV7V=
+Running this through rot13 then base32 decode gives us the first flag
+
+print (al.b32decode((aw.translate(ah))).decode())
+
+
+The second flag involves decrypting the intercepted message.
+
+We modify the encryption lambda function to use decrypt instead and modify the part of the code that gets the current time with the timestamp of the transmission
+
+ar = lambda secret: str(ak.unpack('>I', ap.new(al.b32decode(secret), ak.pack('>Q', int(1740697845.986939//30)), aj.sha1).digest()[-1 & 0x0F:][:4])[0] & 0x7FFFFFFF)[-6:].zfill(6)
+
+
+au = lambda d:aq(av(ar(aw))).encrypt(d);
+au2 = lambda d:aq(av(ar(aw))).decrypt(d);
+
+print(au2(trans).decode())
