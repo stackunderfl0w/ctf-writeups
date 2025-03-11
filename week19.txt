@@ -1,0 +1,26 @@
+The chalenge this time is reversing an insecure diffie helman scheme.
+
+The largest chalenge for me was just getting pwntools working correctly, once that was resolved we get 5 values form the script. A, B , an aes encrpyted flag1, K2 xored with our input, and an encrypted flag2.
+
+Thanks to the fact that a and b are not primes, we can easily get the inverse and use the, with K2 to get K1 and K3, ie the encryption keys for the two halves of the flag.
+
+X = (A * B * g) % n
+invX = pow(X, -1, n)  # modular inverse of X mod n
+K1_int = (K2_int * invX) % n
+
+g3 = pow(g, 3, n)
+Y = (A * B) % n
+Y = (Y * g3) % n
+K3_int = (K2_int * Y) % n
+
+K1_bytes = to_aes_key(K1_int)
+K3_bytes = to_aes_key(K3_int)
+
+# Decrypt ctext1 => flag_1
+cipher1 = AES.new(K1_bytes, AES.MODE_ECB)
+flag1 = cipher1.decrypt(ctext1)
+
+# Decrypt ctext3 => flag_2
+cipher3 = AES.new(K3_bytes, AES.MODE_ECB)
+flag2 = cipher3.decrypt(ctext3)
+
