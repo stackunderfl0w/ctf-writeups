@@ -1,0 +1,3 @@
+This weeks ctf was a github action chalenge. getting a repo to pass 2 tests, one just returns 2 numbers being added and the other seemingly completely random.
+
+The solution ended up being to take advantage of the limited range of the bash random number generator, only 2^16 outputs, and the fact it was predcitable. Durring the first test just cycle through the random numbers till you get to the one just before the random number needed to pass the random test. 
