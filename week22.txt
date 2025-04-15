@@ -1,0 +1,10 @@
+Another rev chalenge. 
+
+The binary sets up a 4k buffer with mmap and reads 4096 bytes into it.
+It then computes the sum of the memmory in that region and forks. The child process using the lower 12 bits as an offset into the binary and uses that as a function pointer(buf + (sum & 0xFFF)), then checks if the return value matches the sum wrecking everything if not. 
+
+The parent process checks the return value to check if the process was not killed by a signal and if the 8 bit return code matches the lower 8 bits if the sum.
+
+
+So we pick a number less than 4096 entry point and write some assembly to return that value. place it at that offset in the input string, and pad the bytes before it to sum to the number we picked.
+
