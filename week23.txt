@@ -1,0 +1,5 @@
+
+Not sure what category this is in.
+We are given a password protected zip and the script that made it. and a website to decrypt it. We can crack the passsword to get romulus.
+
+The actual chalenge to to zip a link to etc/shadow with that password, which returns the hashed password of caesar. Using the correct wordlist and a computer with yescrypt support in libxcrypt we can then crack the hash with john.
