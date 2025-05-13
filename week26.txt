@@ -1,0 +1,52 @@
+This week timmy learns to make a vm, specifially a modified lc3.
+
+
+Notably a trap 26 that opens a file
+5555555557c3        if (rax_4 == 0x26)
+5555555557c3        {
+555555555a15            uint64_t rdx_3 = (uint64_t)reg * 2;
+555555555a26            void* var_c0_1 = &memory + rdx_3;
+555555555a2d            int64_t var_28;
+555555555a2d            __builtin_memset(&var_28, 0, 0x11);
+555555555a41            int32_t var_dc_1 = 0;
+555555555a41            
+555555555ac7            while (*(uint16_t*)var_c0_1)
+555555555ac7            {
+555555555ac7                if (var_dc_1 > 0xf)
+555555555ad0                    break;
+555555555ad0                
+555555555a5d                int32_t rax_36 = var_dc_1;
+555555555a66                var_dc_1 = rax_36 + 1;
+555555555a6e                rdx_3 = (uint64_t)(uint8_t)*(uint16_t*)var_c0_1;
+555555555a75                *(uint8_t*)(&var_28 + (int64_t)rax_36) = rdx_3;
+555555555a87                char var_e0_1 = (*(uint16_t*)var_c0_1 >> 8);
+555555555a87                
+555555555a94                if (var_e0_1)
+555555555a94                {
+555555555a96                    int32_t rax_40 = var_dc_1;
+555555555a9f                    var_dc_1 = rax_40 + 1;
+555555555aa7                    rdx_3 = (uint64_t)var_e0_1;
+555555555aae                    *(uint8_t*)(&var_28 + (int64_t)rax_40) = rdx_3;
+555555555a94                }
+555555555a94                
+555555555ab2                var_c0_1 += 2;
+555555555ac7            }
+555555555ac7            
+555555555ae7            int32_t rax_45 = open(&var_28, 0, rdx_3);
+555555555b09            void var_b8;
+555555555b09            int32_t var_d4_1 = fstat((uint64_t)rax_45, &var_b8, &var_b8);
+555555555b2b            int64_t var_88;
+555555555b2b            sendfile(1, (uint64_t)rax_45, 0, var_88);
+555555555b3a            fflush(__bss_start);
+555555555b40            result = 1;
+5555555557c3        }
+
+
+
+So lets just write a program that opens flag.txt then halts
+    '30 00 E0 02 F0 26 F0 25'  # .ORIG x3000; LEA R0,#2; TRAP x26; TRAP x25
+    '6C 66'  # 'f''l'
+    '67 61'  # 'a''g'
+    '74 2E'  # '.' 't'
+    '74 78'  # 'x''t'
+    '00 00'  # terminating \0
